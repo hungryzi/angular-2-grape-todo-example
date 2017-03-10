@@ -7,6 +7,7 @@ module V1
     include Roar::Hypermedia
     include Grape::Roar::Representer
 
+    property :id
     property :description
     property :complete
 

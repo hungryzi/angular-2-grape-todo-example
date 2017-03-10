@@ -13,4 +13,19 @@ describe V1::TodosApi do
       expect(result['_links']['self']).to be_present
     end
   end
+
+  context 'POST /api/v1/todos' do
+    it 'creates a todo' do
+      post '/api/v1/todos', params: { description: 'feed the cats' }
+
+      expect(response.status).to eq(201)
+
+      result = JSON.parse(response.body)
+      expect(result['id']).to be_present
+      expect(result['_links']['self']).to be_present
+
+      todo = Todo.find result['id']
+      expect(todo.description).to eq('feed the cats')
+    end
+  end
 end

@@ -10,5 +10,10 @@ module V1
     get 'todos' do
       present Todo.all, with: TodosRepresenter
     end
+
+    post 'todos' do
+      todo = Todo.create!(description: params[:description])
+      present todo, with: TodoRepresenter
+    end
   end
 end
