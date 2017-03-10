@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 gem 'grape'
+gem 'roar'
+gem 'grape-roar'
 gem 'hashie-forbidden_attributes'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -39,6 +41,11 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'shoulda-matchers'
 end
 
 group :development do

@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount API => '/api'
+  mount ApplicationApi => '/api'
 end
