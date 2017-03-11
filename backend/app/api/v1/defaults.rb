@@ -22,6 +22,19 @@ module V1
           )
         end
 
+        def handle_record_not_found!(e)
+          errors = [
+            message: e.message,
+            model: e.model,
+            attribute: e.primary_key,
+            value: e.send(e.primary_key)
+          ]
+          error!(
+            { errors: errors, status_code: 404 },
+            404
+          )
+        end
+
         def handle_validation_errors!(e)
           errors = e.errors.map do |k, v|
             { message: v.first, attribute: k.first }
@@ -45,6 +58,7 @@ module V1
       end
 
       rescue_from ActiveRecord::RecordInvalid, with: :handle_invalid_record!
+      rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found!
       rescue_from Grape::Exceptions::ValidationErrors, with: :handle_validation_errors!
       rescue_from :all, with: :handle_unexpected_errors!
     end

@@ -13,7 +13,7 @@ module V1
 
     link :self do |opts|
       request = Grape::Request.new(opts[:env])
-      "#{request.url}/#{id}"
+      request.url
     end
   end
 end

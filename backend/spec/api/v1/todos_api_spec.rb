@@ -1,4 +1,38 @@
 describe V1::TodosApi do
+  describe 'GET /api/v1/todos/:id' do
+    context 'when exists' do
+      it 'returns correct todo' do
+        todo = create(:todo)
+
+        get "/api/v1/todos/#{todo.id}", params: nil, headers: request_headers
+
+        expect(response.status).to eq(200)
+
+        expect(json_response[:description]).to eq(todo.description)
+        expect(json_response[:complete]).to eq(todo.complete)
+        expect(json_response[:_links][:self][:href]).to end_with("/api/v1/todos/#{todo.id}")
+      end
+    end
+
+    context 'when not exists' do
+      it 'returns nice error' do
+        get '/api/v1/todos/42', params: nil, headers: request_headers
+
+        expect(response.status).to eq(404)
+
+        expect(json_response[:errors]).to eq(
+          [
+            message: "Couldn't find Todo with 'id'=42",
+            model: 'Todo',
+            attribute: 'id',
+            value: '42'
+          ]
+        )
+        expect(json_response[:status_code]).to eq(404)
+      end
+    end
+  end
+
   describe 'GET /api/v1/todos' do
     it 'returns all todos' do
       create(:todo)
