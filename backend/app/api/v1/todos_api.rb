@@ -3,6 +3,8 @@ require_dependency 'v1/representers/todos_representer'
 
 module V1
   class TodosApi < BaseApi
+    include V1::Defaults
+
     resources :todos do
       desc 'Get a single todo'
       get '/:id' do
