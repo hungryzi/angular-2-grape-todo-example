@@ -88,6 +88,8 @@ GEM
     grape-roar (0.4.0)
       grape
       roar (~> 1.1.0)
+    grape-swagger (0.26.1)
+      grape (>= 0.16.2)
     hashie (3.5.5)
     hashie-forbidden_attributes (0.1.1)
       hashie (>= 3.0)
@@ -134,6 +136,7 @@ GEM
     rack (2.0.1)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-cors (0.4.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.2)
@@ -251,6 +254,7 @@ DEPENDENCIES
   factory_girl_rails
   grape
   grape-roar
+  grape-swagger
   hashie-forbidden_attributes
   jbuilder (~> 2.5)
   jquery-rails
@@ -258,6 +262,7 @@ DEPENDENCIES
   overcommit
   pg (~> 0.18)
   puma (~> 3.0)
+  rack-cors
   rails (~> 5.0.2)
   roar
   rspec-rails

@@ -1,8 +1,13 @@
+require 'grape-swagger'
+
 module V1
   class BaseApi < Grape::API
-    version 'v1', using: :path
-    formatter :json, Grape::Formatter::Roar
+    content_type :hal, 'application/hal+json'
+    content_type :json, 'application/json'
 
-    mount TodosApi
+    formatter :json, Grape::Formatter::Roar
+    formatter :hal, Grape::Formatter::Roar
+
+    default_format :hal
   end
 end

@@ -6,9 +6,11 @@ git_source(:github) do |repo_name|
 end
 
 gem 'grape'
-gem 'roar'
 gem 'grape-roar'
+gem 'grape-swagger'
 gem 'hashie-forbidden_attributes'
+gem 'rack-cors'
+gem 'roar'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.2'

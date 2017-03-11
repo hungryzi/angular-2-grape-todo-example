@@ -29,6 +29,8 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.include RSpec::Rails::RequestExampleGroup, type: :request, file_path: %r{spec/api}
+  config.include Requests::JsonHelpers, type: :request
+  config.include Requests::HeadersHelpers, type: :request
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
