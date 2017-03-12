@@ -46,7 +46,7 @@ module V1
         end
 
         def handle_unexpected_errors!(e)
-          raise e if Rails.env.development?
+          raise e if Rails.env.development? || Rails.env.test?
 
           error!(
             { errors: [{ message: 'Unexpected error happened on server' }], status_code: 500 },

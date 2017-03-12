@@ -12,8 +12,9 @@ module V1
       end
 
       desc 'Get all todos'
+      paginate
       get '/' do
-        present Todo.all, with: TodosRepresenter
+        present paginate(Todo.all), with: TodosRepresenter
       end
 
       desc 'Create a todo'

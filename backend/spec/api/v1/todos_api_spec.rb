@@ -4,7 +4,7 @@ describe V1::TodosApi do
       it 'returns correct todo' do
         todo = create(:todo)
 
-        get "/api/v1/todos/#{todo.id}", params: nil, headers: request_headers
+        get "/api/v1/todos/#{todo.id}", params: {}, headers: request_headers
 
         expect(response.status).to eq(200)
 
@@ -16,7 +16,7 @@ describe V1::TodosApi do
 
     context 'when not exists' do
       it 'returns nice error' do
-        get '/api/v1/todos/42', params: nil, headers: request_headers
+        get '/api/v1/todos/42', params: {}, headers: request_headers
 
         expect(response.status).to eq(404)
 
@@ -35,16 +35,58 @@ describe V1::TodosApi do
 
   describe 'GET /api/v1/todos' do
     it 'returns all todos' do
-      create(:todo)
-      create(:todo)
+      create_list(:todo, 3)
+
+      allow(Todo).to receive(:default_per_page).and_return(1)
 
       get '/api/v1/todos', params: nil,
                            headers: request_headers
 
       expect(response.status).to eq(200)
 
-      expect(json_response[:_embedded][:todos].length).to eq(2)
-      expect(json_response[:_links][:self]).to be_present
+      expect(json_response[:_embedded][:todos].length).to eq(1)
+      expect(json_response[:total_pages]).to eq(3)
+      expect(json_response[:count]).to eq(1)
+    end
+
+    describe 'links' do
+      before do
+        create_list(:todo, 10)
+        allow(Todo).to receive(:default_per_page).and_return(4)
+      end
+
+      specify do
+        get '/api/v1/todos', params: {},
+                             headers: request_headers, as: :json
+
+        expect(json_response[:_links][:self][:href]).to end_with('/api/v1/todos')
+        expect(json_response[:_links][:first]).not_to be_present
+        expect(json_response[:_links][:prev]).not_to be_present
+        expect(json_response[:_links][:next][:href]).to end_with('/api/v1/todos?page=2')
+        expect(json_response[:_links][:last][:href]).to end_with('/api/v1/todos?page=3')
+      end
+
+      specify do
+        get '/api/v1/todos', params: { page: 2 },
+                             headers: request_headers
+
+        expect(json_response[:_links][:self][:href]).to end_with('/api/v1/todos?page=2')
+        expect(json_response[:_links][:first][:href]).to end_with('/api/v1/todos?page=1')
+        expect(json_response[:_links][:prev][:href]).to end_with('/api/v1/todos?page=1')
+        expect(json_response[:_links][:next][:href]).to end_with('/api/v1/todos?page=3')
+        expect(json_response[:_links][:last][:href]).to end_with('/api/v1/todos?page=3')
+      end
+
+      specify do
+        get '/api/v1/todos', params: { page: 3, per_page: 4 },
+                             headers: request_headers
+
+        expect(json_response[:_links][:self][:href]).to end_with('/api/v1/todos?page=3&per_page=4')
+        expect(json_response[:_links][:first][:href]).to end_with('/api/v1/todos?page=1&per_page=4')
+        expect(json_response[:_links][:prev][:href]).to end_with('/api/v1/todos?page=2&per_page=4')
+        expect(json_response[:_links][:next]).not_to be_present
+        expect(json_response[:_links][:last]).not_to be_present
+      end
     end
   end
 
